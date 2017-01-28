@@ -1,0 +1,1141 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>阿毗達摩-心與心所</title>
+<script src="./jquery-3.1.1.min.js"></script>
+ <style type="text/css"> 
+    div {border-radius:5px; margin:8px;}
+    .GotIt {background-color:#ffff90;} 
+    div.sub_fun {border-width:1px; border-style:solid; margin:8px; padding:8px; float:left;background-color:#e5ffe5;}
+    #message {border-width:1px; border-style:solid; margin:16px; padding:8px; clear:both;background-color:#ffffc0;
+              position: relative; top:5px;}
+    #show_catalog_table, #show_main_table {border-style:solid; margin:8px; padding:8px; float:left;}
+    #main_table , #catalog_table  {clear:both; margin:8px; clear:both;}
+    #main_table  {display: none;}
+    #readmetd {vertical-align:text-top; width:60%}
+    div#heart_function div {margin:0px; margin-left:2px;}
+    table {border-spacing:0px;border:1px solid black;}
+    td {padding:5px;border:1px solid black;}
+    tr.head {background-color:#fff0f0; font-weight: bold;}
+    tr.odd  {background-color:#f0ffff;} 
+    tr.even  {background-color:#fffaf0;} 
+  </style> 
+</head>
+<body>
+
+<!-- 主要內容 -->
+    <div style="text-align:center;">
+        <h2>阿毗達摩 心與心所</h2>  
+    </div>
+    <div id="main_fun"></div>
+    <br><br>
+    <div id="message">結果：</div>
+    <div><div id="show_catalog_table">統計表格</div><div id="show_main_table">詳細列表</div></div>
+    <br>
+    <div id="catalog_table"></div>
+    <br>
+    <div id="main_table"></div>
+    <div style="text-align:center;">
+        本網頁係採用 Creative Commons 姓名標示-非商業性-相同方式分享 3.0 台灣 (中華民國) 授權條款授權。<br>
+        Copyright ©2017 Heaven Chou
+    </div>
+
+<!-- 主要內容 結束 -->
+
+<script>
+    // 主變數
+    var catalog_range = new Array();  // 心的大分類
+    var heart_type = new Array();   // 心的各種分類
+    var cetasika = new Array();     // 五十二心所
+
+    var heart_name = new Array();        // 心名
+    var heart_place = new Array();       // 欲、色、無色、出世間
+    var heart_good = new Array();        // 善惡果報報無記
+    var heart_hetu = new Array();        // 無因,1因,2因,3因
+    var heart_function = new Array();        // 作用:速行、有分、....
+    var heart_door = new Array();        // 作用:速行、有分、....
+    
+
+    function initial()
+    {
+
+        // 心的類別, 例如第一個貪根心類, 就是由 0 開始, 共有 8 個 [0,8]
+        catalog_range = [
+            [0,8],[8,2],[10,2],
+            [12,7],[19,8],[27,3],
+            [30,8],[38,8],[46,8],
+            [54,5],[59,5],[64,5],
+            [69,4],[73,4],[77,4],
+            [81,20],[101,20]
+        ];
+
+        // 心的分類
+        heart_type = [
+            {name:"心名", arr:heart_name},
+            {name:"三界", arr:heart_place},
+            {name:"善惡", arr:heart_good},
+            {name:"因", arr:heart_hetu},
+            {name:"作用", arr:heart_function},
+            {name:"門", arr:heart_door}
+        ];
+
+
+        // 121 心
+        // 八貪根心（lobhamulacittani）
+        heart_name[0] = "悅俱邪見相應無行一心";
+        heart_name[1] = "悅俱邪見相應有行一心";
+        heart_name[2] = "悅俱邪見不相應無行一心";
+        heart_name[3] = "悅俱邪見不相應有行一心";
+        heart_name[4] = "捨俱邪見相應無行一心";
+        heart_name[5] = "捨俱邪見相應有行一心";
+        heart_name[6] = "捨俱邪見不相應無行一心";
+        heart_name[7] = "捨俱邪見不相應有行一心";
+        // 二瞋根心（dosamulacittani）
+        heart_name[8] = "憂俱瞋恚相應無行一心";
+        heart_name[9] = "憂俱瞋恚相應有行一心";
+        // 二痴根心（mohamulacittani）
+        heart_name[10] = "捨俱疑相應一心";
+        heart_name[11] = "捨俱掉舉相應一心";
+        // 七不善果報心（akusalavipakacittani）
+        heart_name[12] = "眼識與捨俱行";
+        heart_name[13] = "耳識與捨俱行";
+        heart_name[14] = "鼻識與捨俱行";
+        heart_name[15] = "舌識與捨俱行";
+        heart_name[16] = "身識與苦俱行";
+        heart_name[17] = "領受與捨俱行";
+        heart_name[18] = "推度與捨俱行";
+        // 八善果報無因心(kusalavipakahetukacittani)
+        heart_name[19] = "眼識與捨俱行";
+        heart_name[20] = "耳識與捨俱行";
+        heart_name[21] = "鼻識與捨俱行";
+        heart_name[22] = "舌識與捨俱行";
+        heart_name[23] = "身識與樂俱行";
+        heart_name[24] = "領受與捨俱行";
+        heart_name[25] = "推度與悅俱行";
+        heart_name[26] = "推度與捨俱行";
+        // 三無因唯作心（ahetukakiriya-cittani）
+        heart_name[27] = "捨俱五門轉向心";
+        heart_name[28] = "捨俱意門轉向心";
+        heart_name[29] = "悅俱（阿羅漢）生笑心";
+        // 八欲界善心（kamavacara-kusalacittani）
+        heart_name[30] = "悅俱智相應無行一心";
+        heart_name[31] = "悅俱智相應有行一心";
+        heart_name[32] = "悅俱智不相應無行一心";
+        heart_name[33] = "悅俱智不相應有行一心";
+        heart_name[34] = "捨俱智相應無行一心";
+        heart_name[35] = "捨俱智相應有行一心";
+        heart_name[36] = "捨俱智不相應無行一心";
+        heart_name[37] = "捨俱智不相應有行一心";
+        // 八欲界果報心(kamavacaravipakacittani)
+        heart_name[38] = "悅俱智相應無行一心";
+        heart_name[39] = "悅俱智相應有行一心";
+        heart_name[40] = "悅俱智不相應無行一心";
+        heart_name[41] = "悅俱智不相應有行一心";
+        heart_name[42] = "捨俱智相應無行一心";
+        heart_name[43] = "捨俱智相應有行一心";
+        heart_name[44] = "捨俱智不相應無行一心";
+        heart_name[45] = "捨俱智不相應有行一心";
+        // 八欲界唯作心 (kamavacarakriyacittani)
+        heart_name[46] = "悅俱智相應無行一心";
+        heart_name[47] = "悅俱智相應有行一心";
+        heart_name[48] = "悅俱智不相應無行一心";
+        heart_name[49] = "悅俱智不相應有行一心";
+        heart_name[50] = "捨俱智相應無行一心";
+        heart_name[51] = "捨俱智相應有行一心";
+        heart_name[52] = "捨俱智不相應無行一心";
+        heart_name[53] = "捨俱智不相應有行一心";
+        // 五色界善心（rupavacara-kusalacittani）
+        heart_name[54] = "初禪善心";
+        heart_name[55] = "第二禪善心";
+        heart_name[56] = "第三禪善心";
+        heart_name[57] = "第四禪善心";
+        heart_name[58] = "第五禪善心";
+        // 五色界果報心(rupavacaravipakacittani)
+        heart_name[59] = "初禪果報心";
+        heart_name[60] = "第二禪果報心";
+        heart_name[61] = "第三禪果報心";
+        heart_name[62] = "第四禪果報心";
+        heart_name[63] = "第五禪果報心";
+        // 五色界唯作心 (rupavacara-kriyacittani)
+        heart_name[64] = "初禪唯作心";
+        heart_name[65] = "第二禪唯作心";
+        heart_name[66] = "第三禪唯作心";
+        heart_name[67] = "第四禪唯作心";
+        heart_name[68] = "第五禪唯作心";
+        // 無色界善心(arupavacarakusalacittani)
+        heart_name[69] = "空無邊處善心";
+        heart_name[70] = "識無邊處善心";
+        heart_name[71] = "無所有處善心";
+        heart_name[72] = "非想非非想處善心";
+        // 無色界果報心 (arupavacaravipakacittani)
+        heart_name[73] = "空無邊處果報心";
+        heart_name[74] = "識無邊處果報心";
+        heart_name[75] = "無所有處果報心";
+        heart_name[76] = "非想非非想處果報心";
+        // 無色界唯作心 (arupavacarakriyacittani)
+        heart_name[77] = "空無邊處唯作心";
+        heart_name[78] = "識無邊處唯作心";
+        heart_name[79] = "無所有處唯作心";
+        heart_name[80] = "非想非非想處唯作心";
+        // 四(20)出世間善心（lokuttara-kusalacittani）
+        heart_name[81] = "初禪須陀洹道心";
+        heart_name[82] = "第二禪須陀洹道心";
+        heart_name[83] = "第三禪須陀洹道心";
+        heart_name[84] = "第四禪須陀洹道心";
+        heart_name[85] = "第五禪須陀洹道心";
+        heart_name[86] = "初禪斯陀含道心";
+        heart_name[87] = "第二禪斯陀含道心";
+        heart_name[88] = "第三禪斯陀含道心";
+        heart_name[89] = "第四禪斯陀含道心";
+        heart_name[90] = "第五禪斯陀含道心";
+        heart_name[91] = "初禪阿那含道心";
+        heart_name[92] = "第二禪阿那含道心";
+        heart_name[93] = "第三禪阿那含道心";
+        heart_name[94] = "第四禪阿那含道心";
+        heart_name[95] = "第五禪阿那含道心";
+        heart_name[96] = "初禪阿羅漢道心";
+        heart_name[97] = "第二禪阿羅漢道心";
+        heart_name[98] = "第三禪阿羅漢道心";
+        heart_name[99] = "第四禪阿羅漢道心";
+        heart_name[100] = "第五禪阿羅漢道心";
+        // 四(20)出世間果報心 (lokuttaravipakacittani)
+        heart_name[101] = "初禪須陀洹果心";
+        heart_name[102] = "第二禪須陀洹果心";
+        heart_name[103] = "第三禪須陀洹果心";
+        heart_name[104] = "第四禪須陀洹果心";
+        heart_name[105] = "第五禪須陀洹果心";
+        heart_name[106] = "初禪斯陀含果心";
+        heart_name[107] = "第二禪斯陀含果心";
+        heart_name[108] = "第三禪斯陀含果心";
+        heart_name[109] = "第四禪斯陀含果心";
+        heart_name[110] = "第五禪斯陀含果心";
+        heart_name[111] = "初禪阿那含果心";
+        heart_name[112] = "第二禪阿那含果心";
+        heart_name[113] = "第三禪阿那含果心";
+        heart_name[114] = "第四禪阿那含果心";
+        heart_name[115] = "第五禪阿那含果心";
+        heart_name[116] = "初禪阿羅漢果心";
+        heart_name[117] = "第二禪阿羅漢果心";
+        heart_name[118] = "第三禪阿羅漢果心";
+        heart_name[119] = "第四禪阿羅漢果心";
+        heart_name[120] = "第五禪阿羅漢果心";
+
+        // 三界分類
+        array_fill(heart_place,0,54,"欲界");
+        array_fill(heart_place,54,15,"色界");
+        array_fill(heart_place,69,12,"無色界");
+        array_fill(heart_place,81,40,"出世間");
+
+        // 善惡心的分類
+        array_fill(heart_good,0,12,"不善");
+        array_fill(heart_good,12,15,"果報");
+        array_fill(heart_good,27,3,"唯作");
+        array_fill(heart_good,30,8,"善心");
+        array_fill(heart_good,38,8,"果報");
+        array_fill(heart_good,46,8,"唯作");
+        array_fill(heart_good,54,5,"善心");
+        array_fill(heart_good,59,5,"果報");
+        array_fill(heart_good,64,5,"唯作");
+        array_fill(heart_good,69,4,"善心");
+        array_fill(heart_good,73,4,"果報");
+        array_fill(heart_good,77,4,"唯作");
+        array_fill(heart_good,81,20,"善心");
+        array_fill(heart_good,101,20,"果報");
+        // 因的分類
+        array_fill(heart_hetu,0,10,"二因");
+        array_fill(heart_hetu,10,2,"一因");
+        array_fill(heart_hetu,12,18,"無因");
+        array_fill(heart_hetu,30,2,"三因");
+        array_fill(heart_hetu,32,2,"二因");
+        array_fill(heart_hetu,34,2,"三因");
+        array_fill(heart_hetu,36,2,"二因");
+        array_fill(heart_hetu,38,2,"三因");
+        array_fill(heart_hetu,40,2,"二因");
+        array_fill(heart_hetu,42,2,"三因");
+        array_fill(heart_hetu,44,2,"二因");
+        array_fill(heart_hetu,46,2,"三因");
+        array_fill(heart_hetu,48,2,"二因");
+        array_fill(heart_hetu,50,2,"三因");
+        array_fill(heart_hetu,52,2,"二因");
+        array_fill(heart_hetu,54,67,"三因");
+        // 作用
+        array_fill(heart_function,0,12,"速行");
+        array_fill(heart_function,12,1,"看");
+        array_fill(heart_function,13,1,"聽");
+        array_fill(heart_function,14,1,"嗅");
+        array_fill(heart_function,15,1,"嚐");
+        array_fill(heart_function,16,1,"觸");
+        array_fill(heart_function,17,1,"領受");
+        array_fill(heart_function,18,1,"結生、有分、死亡、推度、彼所緣");
+        array_fill(heart_function,19,1,"看");
+        array_fill(heart_function,20,1,"聽");
+        array_fill(heart_function,21,1,"嗅");
+        array_fill(heart_function,22,1,"嚐");
+        array_fill(heart_function,23,1,"觸");
+        array_fill(heart_function,24,1,"領受");
+        array_fill(heart_function,25,1,"推度、彼所緣");
+        array_fill(heart_function,26,1,"結生、有分、死亡、推度、彼所緣");
+        array_fill(heart_function,27,1,"轉向");
+        array_fill(heart_function,28,1,"轉向、確定");
+        array_fill(heart_function,29,9,"速行");
+        array_fill(heart_function,38,8,"結生、有分、死亡、彼所緣");
+        array_fill(heart_function,46,13,"速行");
+        array_fill(heart_function,59,5,"結生、有分、死亡");
+        array_fill(heart_function,64,9,"速行");
+        array_fill(heart_function,73,4,"結生、有分、死亡");
+        array_fill(heart_function,77,44,"速行");
+        // 門
+        array_fill(heart_door,0,12,"六門");
+        array_fill(heart_door,12,5,"一門");
+        array_fill(heart_door,17,1,"五門");
+        array_fill(heart_door,18,1,"六門、離門");
+        array_fill(heart_door,19,5,"一門");
+        array_fill(heart_door,24,2,"五門");
+        array_fill(heart_door,25,1,"六門");
+        array_fill(heart_door,26,1,"六門、離門");
+        array_fill(heart_door,27,1,"五門");
+        array_fill(heart_door,28,1,"六門");
+        array_fill(heart_door,29,9,"六門");
+        array_fill(heart_door,38,8,"六門、離門");
+        array_fill(heart_door,46,8,"六門");
+        array_fill(heart_door,54,5,"意門");
+        array_fill(heart_door,59,5,"離門");
+        array_fill(heart_door,64,9,"意門");
+        array_fill(heart_door,73,4,"離門");
+        array_fill(heart_door,77,4,"意門");
+        array_fill(heart_door,81,40,"意門");
+
+        // 五十二心所
+        //cetasika[0] = {name : "觸", arr:[]};
+        cetasika[1] = {name : "受", arr:[]};
+        /*
+        cetasika[2] = {name : "想", arr:[]};
+        cetasika[3] = {name : "思", arr:[]};
+        cetasika[4] = {name : "一境性", arr:[]};
+        cetasika[5] = {name : "名命根", arr:[]};
+        cetasika[6] = {name : "作意", arr:[]};
+        */
+        cetasika[7] = {name : "尋", arr:[]};
+        cetasika[8] = {name : "伺", arr:[]};
+        cetasika[9] = {name : "勝解", arr:[]};
+        cetasika[10] = {name : "精進", arr:[]};
+        cetasika[11] = {name : "喜", arr:[]};
+        cetasika[12] = {name : "欲", arr:[]};
+
+        cetasika[13] = {name : "癡", arr:[]};
+        cetasika[14] = {name : "無慚", arr:[]};
+        cetasika[15] = {name : "無愧", arr:[]};
+        cetasika[16] = {name : "掉舉", arr:[]};
+
+        cetasika[17] = {name : "貪", arr:[]};
+        cetasika[18] = {name : "邪見", arr:[]};
+        cetasika[19] = {name : "慢", arr:[]};
+        cetasika[19] = {name : "慢", arr:[]};
+
+        cetasika[20] = {name : "瞋", arr:[]};
+        cetasika[21] = {name : "嫉", arr:[]};
+        cetasika[22] = {name : "慳", arr:[]};
+        cetasika[23] = {name : "惡作", arr:[]};
+        cetasika[24] = {name : "昏沈", arr:[]};
+        cetasika[25] = {name : "睡眠", arr:[]};
+        cetasika[26] = {name : "疑", arr:[]};
+        // cetasika[27~45] = {name : "通一切美心所", arr:[]};
+        cetasika[46] = {name : "正語", arr:[]};
+        cetasika[47] = {name : "正業", arr:[]};
+        cetasika[48] = {name : "正命", arr:[]};
+        cetasika[49] = {name : "悲", arr:[]};
+        cetasika[50] = {name : "隨喜", arr:[]};
+        cetasika[51] = {name : "慧", arr:[]};
+
+        // 每一個心所在 121 心的狀況 1:有 , 0:無 , 2:其他(可能有或無)
+
+        //array_fill(cetasika[0].arr,0,121,1);
+
+        array_fill(cetasika[1].arr,0,4,"悅");
+        array_fill(cetasika[1].arr,4,4,"捨");
+        array_fill(cetasika[1].arr,8,2,"憂");
+        array_fill(cetasika[1].arr,10,6,"捨");
+        array_fill(cetasika[1].arr,16,1,"苦");
+        array_fill(cetasika[1].arr,17,6,"捨");
+        array_fill(cetasika[1].arr,23,1,"樂");
+        array_fill(cetasika[1].arr,24,1,"捨");
+        array_fill(cetasika[1].arr,25,1,"悅");
+        array_fill(cetasika[1].arr,26,3,"捨");
+        array_fill(cetasika[1].arr,29,1,"悅");
+        array_fill(cetasika[1].arr,30,4,"悅");
+        array_fill(cetasika[1].arr,34,4,"捨");
+        array_fill(cetasika[1].arr,38,4,"悅");
+        array_fill(cetasika[1].arr,42,4,"捨");
+        array_fill(cetasika[1].arr,46,4,"悅");
+        array_fill(cetasika[1].arr,50,4,"捨");
+        array_fill(cetasika[1].arr,54,4,"悅");
+        array_fill(cetasika[1].arr,58,1,"捨");
+        array_fill(cetasika[1].arr,59,4,"悅");
+        array_fill(cetasika[1].arr,63,1,"捨");
+        array_fill(cetasika[1].arr,64,4,"悅");
+        array_fill(cetasika[1].arr,68,13,"捨");
+
+        array_fill(cetasika[1].arr,81,4,"悅");
+        array_fill(cetasika[1].arr,85,1,"捨");
+        array_fill(cetasika[1].arr,86,4,"悅");
+        array_fill(cetasika[1].arr,90,1,"捨");
+        array_fill(cetasika[1].arr,91,4,"悅");
+        array_fill(cetasika[1].arr,95,1,"捨");
+        array_fill(cetasika[1].arr,96,4,"悅");
+        array_fill(cetasika[1].arr,100,1,"捨");
+
+        array_fill(cetasika[1].arr,101,4,"悅");
+        array_fill(cetasika[1].arr,105,1,"捨");
+        array_fill(cetasika[1].arr,106,4,"悅");
+        array_fill(cetasika[1].arr,110,1,"捨");
+        array_fill(cetasika[1].arr,111,4,"悅");
+        array_fill(cetasika[1].arr,115,1,"捨");
+        array_fill(cetasika[1].arr,116,4,"悅");
+        array_fill(cetasika[1].arr,120,1,"捨");
+        
+        /*
+        array_fill(cetasika[2].arr,0,121,1);
+        array_fill(cetasika[3].arr,0,121,1);
+        array_fill(cetasika[4].arr,0,121,1);
+        array_fill(cetasika[5].arr,0,121,1);
+        array_fill(cetasika[6].arr,0,121,1);
+        */
+
+        // 先全部填為空白
+        for(x=7;x<27;x++) array_fill(cetasika[x].arr,0,121,"");
+
+        array_fill(cetasika[7].arr,0,12,"尋");
+        array_fill(cetasika[7].arr,17,2,"尋");
+        array_fill(cetasika[7].arr,24,31,"尋");
+        array_fill(cetasika[7].arr,59,1,"尋");
+        array_fill(cetasika[7].arr,64,1,"尋");
+        array_fill(cetasika[7].arr,81,1,"尋");
+        array_fill(cetasika[7].arr,86,1,"尋");
+        array_fill(cetasika[7].arr,91,1,"尋");
+        array_fill(cetasika[7].arr,96,1,"尋");
+        array_fill(cetasika[7].arr,101,1,"尋");
+        array_fill(cetasika[7].arr,106,1,"尋");
+        array_fill(cetasika[7].arr,111,1,"尋");
+        array_fill(cetasika[7].arr,116,1,"尋");
+        // 伺
+        for(x in cetasika[7].arr)
+        {
+            cetasika[8].arr[x] = cetasika[7].arr[x];
+            if(cetasika[8].arr[x] == "尋") cetasika[8].arr[x] = "伺";
+        }
+        cetasika[8].arr[55] = "伺";
+        cetasika[8].arr[60] = "伺";
+        cetasika[8].arr[65] = "伺";
+        for(x=0; x<8; x++) cetasika[8].arr[82+x*5] = "伺";
+        // 勝解
+        for(x=0; x<54; x++)
+        {
+            cetasika[9].arr[x] = cetasika[7].arr[x];
+            if(cetasika[9].arr[x] == "尋") cetasika[9].arr[x] = "勝解";
+        }
+        cetasika[9].arr[10] = "";   // 痴根無勝解
+        array_fill(cetasika[9].arr,54,67,"勝解");
+        // 精進
+        array_fill(cetasika[10].arr,0,12,"精進");
+        array_fill(cetasika[10].arr,28,93,"精進");
+        // 喜
+        array_fill(cetasika[11].arr,0,4,"喜");
+        cetasika[11].arr[25] = "喜"; //推度與悅俱行
+        array_fill(cetasika[11].arr,29,5,"喜");
+        array_fill(cetasika[11].arr,38,4,"喜");
+        array_fill(cetasika[11].arr,46,4,"喜");
+        array_fill(cetasika[11].arr,54,3,"喜");
+        array_fill(cetasika[11].arr,59,3,"喜");
+        array_fill(cetasika[11].arr,64,3,"喜");
+        array_fill(cetasika[11].arr,81,3,"喜");
+        array_fill(cetasika[11].arr,86,3,"喜");
+        array_fill(cetasika[11].arr,91,3,"喜");
+        array_fill(cetasika[11].arr,96,3,"喜");
+        array_fill(cetasika[11].arr,101,3,"喜");
+        array_fill(cetasika[11].arr,106,3,"喜");
+        array_fill(cetasika[11].arr,111,3,"喜");
+        array_fill(cetasika[11].arr,116,3,"喜");
+        // 欲
+        array_fill(cetasika[12].arr,0,10,"欲");
+        array_fill(cetasika[12].arr,30,91,"欲");
+
+        array_fill(cetasika[13].arr,0,12,"癡");
+        array_fill(cetasika[14].arr,0,12,"無慚");
+        array_fill(cetasika[15].arr,0,12,"無愧");
+        array_fill(cetasika[16].arr,0,12,"掉舉");
+
+        array_fill(cetasika[17].arr,0,8,"貪");
+        array_fill(cetasika[18].arr,0,2,"邪見");
+        array_fill(cetasika[18].arr,4,2,"邪見");
+        array_fill(cetasika[19].arr,2,2,"慢");
+        array_fill(cetasika[19].arr,6,2,"慢");
+
+        array_fill(cetasika[20].arr,8,2,"瞋");
+        array_fill(cetasika[21].arr,8,2,"嫉");
+        array_fill(cetasika[22].arr,8,2,"慳");
+        array_fill(cetasika[23].arr,8,2,"惡作");
+
+        for(x=1;x<=9;x=x+2) cetasika[24].arr[x] = "昏沈";
+        for(x=1;x<=9;x=x+2) cetasika[25].arr[x] = "睡眠";
+        array_fill(cetasika[26].arr,10,1,"疑");
+
+        // 美心所
+        for(x=46;x<52;x++) array_fill(cetasika[x].arr,0,121,"");
+
+        array_fill(cetasika[46].arr,30,8,"正語");
+        array_fill(cetasika[46].arr,81,40,"正語");
+        array_fill(cetasika[47].arr,30,8,"正業");
+        array_fill(cetasika[47].arr,81,40,"正業");
+        array_fill(cetasika[48].arr,30,8,"正命");
+        array_fill(cetasika[48].arr,81,40,"正命");
+
+        array_fill(cetasika[49].arr,30,8,"悲");
+        array_fill(cetasika[49].arr,46,12,"悲");
+        array_fill(cetasika[49].arr,59,4,"悲");
+        array_fill(cetasika[49].arr,64,4,"悲");
+
+        array_fill(cetasika[50].arr,30,8,"隨喜");
+        array_fill(cetasika[50].arr,46,12,"隨喜");
+        array_fill(cetasika[50].arr,59,4,"隨喜");
+        array_fill(cetasika[50].arr,64,4,"隨喜");
+
+        array_fill(cetasika[51].arr,30,2,"慧");
+        array_fill(cetasika[51].arr,34,2,"慧");
+        array_fill(cetasika[51].arr,38,2,"慧");
+        array_fill(cetasika[51].arr,42,2,"慧");
+        array_fill(cetasika[51].arr,46,2,"慧");
+        array_fill(cetasika[51].arr,50,2,"慧");
+        array_fill(cetasika[51].arr,54,67,"慧");
+    }
+
+    // 在指定陣列填入指定資料
+    function array_fill(arr,x,y,value)
+    {
+        for(var i=0; i<y; i++)
+        {
+            arr[x+i] = value;
+        }
+    }
+
+    // 畫上方的選擇按鈕
+
+    function draw_fun_menu()
+    {
+        // 三界
+        $("#main_fun").append("<div id='heart_place' class='sub_fun'></div>");
+        $("#heart_place").append(draw_fun_button("三界","欲界","HeartPlace_0","欲界"));
+        $("#heart_place").append(draw_fun_button("三界","色界","HeartPlace_1","色界"));
+        $("#heart_place").append(draw_fun_button("三界","無色界","HeartPlace_2","無色界"));
+        $("#heart_place").append(draw_fun_button("三界","出世間","HeartPlace_3","出世間"));
+
+        // 善惡分類
+        $("#main_fun").append("<div id='heart_good' class='sub_fun'></div>");
+        $("#heart_good").append(draw_fun_button("善惡","善心","HeartGood_0","善心"));
+        $("#heart_good").append(draw_fun_button("善惡","不善","HeartGood_1","不善心"));
+        $("#heart_good").append(draw_fun_button("善惡","果報","HeartGood_2","果報心"));
+        $("#heart_good").append(draw_fun_button("善惡","唯作","HeartGood_3","唯作心"));
+
+        // 因
+        $("#main_fun").append("<div id='heart_hetu' class='sub_fun'></div>");
+        $("#heart_hetu").append(draw_fun_button("因","無因","HeartHetu_0","無因心"));
+        $("#heart_hetu").append(draw_fun_button("因","一因","HeartHetu_1","一因心"));
+        $("#heart_hetu").append(draw_fun_button("因","二因","HeartHetu_2","二因心"));
+        $("#heart_hetu").append(draw_fun_button("因","三因","HeartHetu_3","三因心"));
+
+        // 作用
+        $("#main_fun").append("<div id='heart_function' class='sub_fun'></div>");
+        $("#heart_function").append("<div id='heart_function1' style='float:left;'></div>");
+        $("#heart_function").append("<div id='heart_function2' style='float:left;'></div>");
+        $("#heart_function").append("<div id='heart_function3' style='float:left;'></div>");
+        $("#heart_function1").append(draw_fun_button("作用","看","HeartFunction_1","看"));
+        $("#heart_function1").append(draw_fun_button("作用","聽","HeartFunction_2","聽"));
+        $("#heart_function1").append(draw_fun_button("作用","嗅","HeartFunction_3","嗅"));
+        $("#heart_function1").append(draw_fun_button("作用","嚐","HeartFunction_4","嚐"));
+        $("#heart_function1").append(draw_fun_button("作用","觸","HeartFunction_5","觸"));
+        $("#heart_function2").append(draw_fun_button("作用","結生","HeartFunction_7","結生"));
+        $("#heart_function2").append(draw_fun_button("作用","有分","HeartFunction_8","有分"));
+        $("#heart_function2").append(draw_fun_button("作用","死亡","HeartFunction_9","死亡"));
+        $("#heart_function2").append(draw_fun_button("作用","推度","HeartFunction_10","推度"));
+        $("#heart_function2").append(draw_fun_button("作用","彼所緣","HeartFunction_11","彼所緣"));
+        $("#heart_function3").append(draw_fun_button("作用","速行","HeartFunction_0","速行"));
+        $("#heart_function3").append(draw_fun_button("作用","領受","HeartFunction_6","領受"));
+        $("#heart_function3").append(draw_fun_button("作用","轉向","HeartFunction_12","轉向"));
+        $("#heart_function3").append(draw_fun_button("作用","確定","HeartFunction_1ˇ","確定"));
+
+        // 門
+        $("#main_fun").append("<div id='heart_door' class='sub_fun'></div>");
+        $("#heart_door").append(draw_fun_button("門","一門","HeartDoor_0","一門(五根門)"));
+        $("#heart_door").append(draw_fun_button("門","意門","HeartDoor_1","意門"));
+        $("#heart_door").append(draw_fun_button("門","五門","HeartDoor_2","五門"));
+        $("#heart_door").append(draw_fun_button("門","六門","HeartDoor_3","六門"));
+        $("#heart_door").append(draw_fun_button("門","離門","HeartDoor_4","離門"));
+
+        // 受
+        $("#main_fun").append("<div id='cetasika_2' class='sub_fun'></div>");
+        $("#cetasika_2").append(draw_fun_button("受","苦","cetasika_2_0","苦受"));
+        $("#cetasika_2").append(draw_fun_button("受","樂","cetasika_2_1","樂受"));
+        $("#cetasika_2").append(draw_fun_button("受","悅","cetasika_2_2","悅受"));
+        $("#cetasika_2").append(draw_fun_button("受","憂","cetasika_2_3","憂受"));
+        $("#cetasika_2").append(draw_fun_button("受","捨","cetasika_2_3","捨受"));
+        // 尋
+        $("#main_fun").append("<div id='cetasika_7' class='sub_fun'></div>");
+        $("#cetasika_7").append(draw_fun_button("尋","尋","cetasika_7_0","尋"));
+        $("#cetasika_7").append(draw_fun_button("尋","","cetasika_7_1","無尋"));
+        // 伺
+        $("#main_fun").append("<div id='cetasika_8' class='sub_fun'></div>");
+        $("#cetasika_8").append(draw_fun_button("伺","伺","cetasika_8_0","伺"));
+        $("#cetasika_8").append(draw_fun_button("伺","","cetasika_8_1","無伺"));
+        // 勝解
+        $("#main_fun").append("<div id='cetasika_9' class='sub_fun'></div>");
+        $("#cetasika_9").append(draw_fun_button("勝解","勝解","cetasika_9_0","勝解"));
+        $("#cetasika_9").append(draw_fun_button("勝解","","cetasika_9_1","無勝解"));
+        // 精進
+        $("#main_fun").append("<div id='cetasika_10' class='sub_fun'></div>");
+        $("#cetasika_10").append(draw_fun_button("精進","精進","cetasika_10_0","精進"));
+        $("#cetasika_10").append(draw_fun_button("精進","","cetasika_10_1","無精進"));
+        // 喜
+        $("#main_fun").append("<div id='cetasika_11' class='sub_fun'></div>");
+        $("#cetasika_11").append(draw_fun_button("喜","喜","cetasika_11_0","喜"));
+        $("#cetasika_11").append(draw_fun_button("喜","","cetasika_11_1","無喜"));
+        // 欲
+        $("#main_fun").append("<div id='cetasika_12' class='sub_fun'></div>");
+        $("#cetasika_12").append(draw_fun_button("欲","欲","cetasika_12_0","欲"));
+        $("#cetasika_12").append(draw_fun_button("欲","","cetasika_12_1","無欲"));
+
+        $("#main_fun").append("<div id='cetasika_13' class='sub_fun'></div>");
+        $("#cetasika_13").append(draw_fun_button("癡","癡","cetasika_13_0","癡"));
+        $("#cetasika_13").append(draw_fun_button("癡","","cetasika_13_1","無癡"));
+        $("#main_fun").append("<div id='cetasika_14' class='sub_fun'></div>");
+        $("#cetasika_14").append(draw_fun_button("無慚","無慚","cetasika_14_0","無慚"));
+        $("#cetasika_14").append(draw_fun_button("無慚","","cetasika_14_1","無無慚"));
+        $("#main_fun").append("<div id='cetasika_15' class='sub_fun'></div>");
+        $("#cetasika_15").append(draw_fun_button("無愧","無愧","cetasika_15_0","無愧"));
+        $("#cetasika_15").append(draw_fun_button("無愧","","cetasika_15_1","無無愧"));
+        $("#main_fun").append("<div id='cetasika_16' class='sub_fun'></div>");
+        $("#cetasika_16").append(draw_fun_button("掉舉","掉舉","cetasika_16_0","掉舉"));
+        $("#cetasika_16").append(draw_fun_button("掉舉","","cetasika_16_1","無掉舉"));
+
+        $("#main_fun").append("<div id='cetasika_17' class='sub_fun'></div>");
+        $("#cetasika_17").append(draw_fun_button("貪","貪","cetasika_17_0","貪"));
+        $("#cetasika_17").append(draw_fun_button("貪","","cetasika_17_1","無貪"));
+        $("#main_fun").append("<div id='cetasika_18' class='sub_fun'></div>");
+        $("#cetasika_18").append(draw_fun_button("邪見","邪見","cetasika_18_0","邪見"));
+        $("#cetasika_18").append(draw_fun_button("邪見","","cetasika_18_1","無邪見"));
+        $("#main_fun").append("<div id='cetasika_19' class='sub_fun'></div>");
+        $("#cetasika_19").append(draw_fun_button("慢","慢","cetasika_19_0","慢"));
+        $("#cetasika_19").append(draw_fun_button("慢","","cetasika_19_1","無慢"));
+
+
+        $("#main_fun").append("<div id='cetasika_20' class='sub_fun'></div>");
+        $("#cetasika_20").append(draw_fun_button("瞋","瞋","cetasika_20_0","瞋"));
+        $("#cetasika_20").append(draw_fun_button("瞋","","cetasika_20_1","無瞋"));
+        $("#main_fun").append("<div id='cetasika_21' class='sub_fun'></div>");
+        $("#cetasika_21").append(draw_fun_button("嫉","嫉","cetasika_21_0","嫉"));
+        $("#cetasika_21").append(draw_fun_button("嫉","","cetasika_21_1","無嫉"));
+        $("#main_fun").append("<div id='cetasika_22' class='sub_fun'></div>");
+        $("#cetasika_22").append(draw_fun_button("慳","慳","cetasika_22_0","慳"));
+        $("#cetasika_22").append(draw_fun_button("慳","","cetasika_22_1","無慳"));
+        $("#main_fun").append("<div id='cetasika_23' class='sub_fun'></div>");
+        $("#cetasika_23").append(draw_fun_button("惡作","惡作","cetasika_23_0","惡作"));
+        $("#cetasika_23").append(draw_fun_button("惡作","","cetasika_23_1","無惡作"));
+        $("#main_fun").append("<div id='cetasika_24' class='sub_fun'></div>");
+        $("#cetasika_24").append(draw_fun_button("昏沈","昏沈","cetasika_24_0","昏沈"));
+        $("#cetasika_24").append(draw_fun_button("昏沈","","cetasika_24_1","無昏沈"));
+        $("#main_fun").append("<div id='cetasika_25' class='sub_fun'></div>");
+        $("#cetasika_25").append(draw_fun_button("睡眠","睡眠","cetasika_25_0","睡眠"));
+        $("#cetasika_25").append(draw_fun_button("睡眠","","cetasika_25_1","無睡眠"));
+        $("#main_fun").append("<div id='cetasika_26' class='sub_fun'></div>");
+        $("#cetasika_26").append(draw_fun_button("疑","疑","cetasika_26_0","疑"));
+        $("#cetasika_26").append(draw_fun_button("疑","","cetasika_26_1","無疑"));
+
+        $("#main_fun").append("<div id='cetasika_46' class='sub_fun'></div>");
+        $("#cetasika_46").append(draw_fun_button("正語","正語","cetasika_46_0","正語"));
+        $("#cetasika_46").append(draw_fun_button("正語","","cetasika_46_1","無正語"));
+        $("#main_fun").append("<div id='cetasika_47' class='sub_fun'></div>");
+        $("#cetasika_47").append(draw_fun_button("正業","正業","cetasika_47_0","正業"));
+        $("#cetasika_47").append(draw_fun_button("正業","","cetasika_47_1","無正業"));
+        $("#main_fun").append("<div id='cetasika_48' class='sub_fun'></div>");
+        $("#cetasika_48").append(draw_fun_button("正命","正命","cetasika_48_0","正命"));
+        $("#cetasika_48").append(draw_fun_button("正命","","cetasika_48_1","無正命"));
+        $("#main_fun").append("<div id='cetasika_49' class='sub_fun'></div>");
+        $("#cetasika_49").append(draw_fun_button("悲","悲","cetasika_49_0","悲"));
+        $("#cetasika_49").append(draw_fun_button("悲","","cetasika_49_1","無悲"));
+        $("#main_fun").append("<div id='cetasika_50' class='sub_fun'></div>");
+        $("#cetasika_50").append(draw_fun_button("隨喜","隨喜","cetasika_50_0","隨喜"));
+        $("#cetasika_50").append(draw_fun_button("隨喜","","cetasika_50_1","無隨喜"));
+        $("#main_fun").append("<div id='cetasika_51' class='sub_fun'></div>");
+        $("#cetasika_51").append(draw_fun_button("慧","慧","cetasika_51_0","慧"));
+        $("#cetasika_51").append(draw_fun_button("慧","","cetasika_51_1","無慧"));
+    }
+
+    // 畫單一的按鈕
+    function draw_fun_button(kind, value, id, show)
+    {
+        // <label><input type="checkbox" name="善惡" value="善" id="HeartGood_0">善心</label>
+        return("<label><input type='checkbox' name='"+kind+"' value='"+value+"' id='"+id+"'>"+show+"</label><br>\n");
+    }
+
+    // 畫表格
+    function draw_main_table()
+    {
+        var table = "<table>";
+        table += "<tr class='head'>";
+        // 分類
+        table += "<td>類別</td>";
+        // 心的分類
+        for(x in heart_type)
+        {
+            let class_str = "heart_type_" + x;
+            table += "<td class='" + class_str + "'>" + heart_type[x].name + "</td>";
+        }
+        // 心所
+        for(x in cetasika)
+        {
+            let class_str = "cetasika_" + x;
+            table += "<td class='" + class_str + "'>" + cetasika[x].name + "</td>";
+        }
+        table += "</tr>\n";
+        let odd_even = "";
+        for(y in heart_type[0].arr)
+        {
+            let tdhead = "";
+            // 分類
+            if(y==0) { odd_even = "odd"; tdhead = "<td rowspan=12>欲界不善心</td>"; }
+            if(y==12) { odd_even = "even"; tdhead = "<td rowspan=7>欲界無因<br>不善果報心</td>"; }
+            if(y==19) { odd_even = "odd"; tdhead = "<td rowspan=8>欲界無因<br>善果報心</td>"; }
+            if(y==27) { odd_even = "even"; tdhead = "<td rowspan=3>欲界無因<br>唯作心</td>"; }
+            if(y==30) { odd_even = "odd"; tdhead = "<td rowspan=8>欲界美心<br>善心</td>"; }
+            if(y==38) { odd_even = "even"; tdhead = "<td rowspan=8>欲界美心<br>果報心</td>"; }
+            if(y==46) { odd_even = "odd"; tdhead = "<td rowspan=8>欲界美心<br>唯作心</td>"; }
+            if(y==54) { odd_even = "even"; tdhead = "<td rowspan=5>色界心<br>善心</td>"; }
+            if(y==59) { odd_even = "odd"; tdhead = "<td rowspan=5>色界心<br>果報心</td>"; }
+            if(y==64) { odd_even = "even"; tdhead = "<td rowspan=5>色界心<br>唯作心</td>"; }
+            if(y==69) { odd_even = "odd"; tdhead = "<td rowspan=4>無色界心<br>善心</td>"; }
+            if(y==73) { odd_even = "even"; tdhead = "<td rowspan=4>無色界心<br>果報心</td>"; }
+            if(y==77) { odd_even = "odd"; tdhead = "<td rowspan=4>無色界心<br>唯作心</td>"; }
+            if(y==81) { odd_even = "even"; tdhead = "<td rowspan=20>出世間道心</td>"; }
+            if(y==101) { odd_even = "odd"; tdhead = "<td rowspan=20>出世間果心</td>"; }
+
+            table = table + "<tr class='" + odd_even + "'>" + tdhead;
+
+            // 心的分類
+            for(x in heart_type)
+            {
+                let class_str = "heart_type" + x + " heart" + y;
+                let num = "";
+                if(x == 0) 
+                {
+                    num = 1 + Number(y);
+                    num = num + ".";
+                }
+                table += "<td class='" + class_str + "'>" + num + heart_type[x].arr[y] + "</td>";
+            }
+            // 心所
+            for(x in cetasika)
+            {
+                let class_str = "cetasika" + x + " heart" + y;
+                table += "<td class='" + class_str + "'>" + cetasika[x].arr[y] + "</td>";
+            }
+            table += "</tr>\n";
+        }
+        table += "</table>\n";
+        $("#main_table").append(table);
+    }
+
+
+    // 畫分類的表格
+    function draw_catalog_table()
+    {
+        var table = "<table>";
+        table += "<tr>";
+        // 分類
+        table += "<td colspan=3>類別</td><td>心的數量</td><td id='readmetd' rowspan=18><div id='readme'></div></td>";
+        table += "</tr>\n";
+
+        for(y=0; y<17; y++)  // 17 個大分類
+        {
+            table += "<tr>";
+            // 分類
+            if(y==0) table += "<td rowspan=9>欲界心(54)</td>";
+            if(y==9) table += "<td rowspan=3>色界心(15)</td>";
+            if(y==12) table += "<td rowspan=3>無色界心(12)</td>";
+            if(y==15) table += "<td rowspan=2>出世間心(40)</td>";
+            
+            if(y==0) table += "<td rowspan=3>不善心(12)</td>";
+            if(y==3) table += "<td rowspan=3>無因心(18)</td>";
+            if(y==6) table += "<td rowspan=3>美　心(24)</td>";
+
+            if(y==0) table += "<td>貪根心(8)</td>";
+            if(y==1) table += "<td>瞋根心(2)</td>";
+            if(y==2) table += "<td>痴根心(2)</td>";
+            if(y==3) table += "<td>不善果報心(7)</td>";
+            if(y==4) table += "<td>善果報心(8)</td>";
+            if(y==5) table += "<td>無因唯作心(3)</td>";
+            if(y==6) table += "<td>欲界善心(8)</td>";
+            if(y==7) table += "<td>欲界果報心(8)</td>";
+            if(y==8) table += "<td>欲界唯作心(8)</td>";
+            if(y==9) table += "<td colspan=2>色界善心(5)</td>";
+            if(y==10) table += "<td colspan=2>色界果報心(5)</td>";
+            if(y==11) table += "<td colspan=2>色界唯作心(5)</td>";
+            if(y==12) table += "<td colspan=2>無色界善心(4)</td>";
+            if(y==13) table += "<td colspan=2>無色界果報心(4)</td>";
+            if(y==14) table += "<td colspan=2>無色界唯作心(4)</td>";
+            if(y==15) table += "<td colspan=2>道心(20)</td>";
+            if(y==16) table += "<td colspan=2>果心(20)</td>";
+
+            // 心的分類
+            let class_str = "catalog_" + y;
+            table += "<td id='" + class_str + "' class='catalog'>　</td>";
+        }
+        table += "</table>\n";
+        $("#catalog_table").append(table);
+    }
+
+    // 根據畫面上 check 的情況秀出相對應的心
+    function ShowHeart_byClick()
+    {
+        $("td").removeClass("GotIt"); // 先清除原有的顏色
+        $(".catalog").html(""); // 統計表格清光
+
+        var Result = new ResultObj(heart_type[0].arr.length, heart_type.length, cetasika.length);
+        Result.check_checkbox();
+        Result.show_result();
+        $("#message").html("結果：共找到 " + Result.found_heart + " 心。");
+        // 判斷正語、正業、正命是否同時按下
+        if(($("#cetasika_46_0").is(":checked") && $("#cetasika_47_0").is(":checked")) ||
+           ($("#cetasika_46_0").is(":checked") && $("#cetasika_48_0").is(":checked")) ||
+           ($("#cetasika_47_0").is(":checked") && $("#cetasika_48_0").is(":checked")))
+                $("#message").append("（註：世間心裡正語、正業、正命三離心所是不能共存的。）");
+
+    }
+
+    // 顯示全表格的按鈕被按的情況
+    function show_main_table_click()
+    {
+        $("#main_table").show();
+        $("#catalog_table").hide();
+        div_mouse_down($("#show_main_table"));
+        div_mouse_up($("#show_catalog_table"));
+    }
+    // 顯示統計表格的按鈕被按的情況
+    function show_catalog_table_click()
+    {
+        $("#main_table").hide();
+        $("#catalog_table").show();
+        div_mouse_up($("#show_main_table"));
+        div_mouse_down($("#show_catalog_table"));
+    }
+
+    function div_mouse_down(button)
+    {
+        button.css("border-top-width", 3);
+        button.css("border-left-width", 3);
+        button.css("border-right-width", 2);
+        button.css("border-bottom-width", 2);
+        button.css("border-top-color", "#555555");
+        button.css("border-left-color", "#555555");
+        button.css("border-right-color", "#888888");
+        button.css("border-bottom-color", "#888888");
+        button.css("background-color", "#e5e5ff");
+        button.css("box-shadow", "0px 0px 0px #888888");
+    }
+
+    function div_mouse_up(button)
+    {
+        button.css("border-top-width", 2);
+        button.css("border-left-width", 2);
+        button.css("border-right-width", 3);
+        button.css("border-bottom-width", 3);
+        button.css("border-top-color", "#888888");
+        button.css("border-left-color", "#888888");
+        button.css("border-right-color", "#555555");
+        button.css("border-bottom-color", "#555555");
+        button.css("background-color", "#f5f5ff");
+        button.css("box-shadow", "3px 3px 3px #888888");
+    }
+    
+    function show_readme()
+    {
+        let readme = "" +
+        "<h3>說明：</h3>" +
+        "本網頁可依據指定的條件列出符合的心。<br>" +
+        "目前是選中的條件就會列出，例如在「作用」的條件中同時選取「推度、彼所緣」，則只要符合任一條件的心就會列出。" +
+        "<h3>待改進：（有時間的話 ^^!）</h3>" +
+        "1. 加上「剛好符合」、「包含全部選取條件」等不同的設定。<br>" +
+        "2. 提供文字輸入界面及網址直接連結方式。<br>" +
+        "3. 界面會再調整美觀及順手好用一點。(歡迎提供建議)" +
+        "<h3>版本：</h3>" +
+        "v1.0　2017/01/28 新年快樂版。雖然還很粗糙，因為過年了，基本功能也有了，就放出來讓大家試用看看。<br><br>" +
+        "下載本頁及 jQuery 即可離線執行。<br><br>" +
+        "GitHub : <a href='https://github.com/heavenchou/watch-heart' target='_blank'>" +
+        "https://github.com/heavenchou/watch-heart</a>";
+
+        $("#readme").html(readme);
+    }
+
+    // =======================================================================
+
+    // 呈現結果用的物件
+    function ResultObj(heart_num, heart_type_num, cetasika_num)
+    {
+        // 主要方法:
+        // 1. 建一個 89 心的陣列儲存結果, 例 this.heart[0] = 1
+        // 2. 建一個陣列儲存有多少總類被使用, 例如 this.type[0] = 1 , 表示第一類被選用了
+        // 3. 建一個 52 心所陣列儲存多少總類被使用, 例如 this.cetasika[0] = 1, 表示第一心所被選了
+        // 4. 例如選擇了 "不善心" , 表示 "善惡" 這一類被選用了, 會先存在 new_heart
+        //    this.type[0] = 1
+        //    new_heart["善惡"][0]~new_heart["善惡"][11] 都是 1 , 假設這 12 心都是不善心
+        //    然後選擇了 "色界" , 表示 "三界" 這一類被選用了,
+        //    this.type[1] = 1
+        //    new_heart["三界"][7]~new_heart["三界"][9] 都是 1 , 假設這 7~9 這 3 心都是色界心
+        //    最後全部加到 heart[] 中
+        // 5. 因為共有二類被選用了, 所以檢查, 只有 this.heart[7]~this.heart[9] 是 2 , 表示合格
+        // 6. 因此在那二類的座標, 以及那 3 心的座標, 共六個位置要塗色.
+
+        this.heart_num = heart_num;     // 心的數目, 應該是 121
+        this.heart_type_num = heart_type_num;   // 心的分類, 不一定, 看精細度
+        this.cetasika_num = cetasika_num;       // 心所, 應該是 52
+
+        this.heart = [];
+        this.heart2_function = [];  // 用法和 this.heart 一樣, 只是作用比較特別, 要先算好, 重覆只能算一次, 再加回 heart
+        this.heart2_door = [];      // 同上, 門也有多選
+        this.heart_type = [];
+        this.cetasika = [];
+
+        this.found_heart = 0;   // 找到的心數目
+        
+        // 初值化, 全部歸 0
+        this.initial = function () {
+            for(i=0; i<this.heart_num; i++)
+            {
+                this.heart[i] = 0;
+                this.heart2_function[i] = 0;
+                this.heart2_door[i] = 0;
+            }
+            for(i=0; i<this.heart_type_num; i++)
+            {
+                this.heart_type[i] = 0;
+            }
+            for(i=0; i<this.cetasika_num; i++)
+            {
+                this.cetasika[i] = 0;
+            }
+        };
+        // 增加某一類的情況, 例如選擇 "善惡" 類的 "善心".
+        this.add_condition = function(kind, value, result_arr)
+        {
+            // 先找出總類在在哪一個縱座標
+            for(x in heart_type)
+            {
+                // 找到要處理的總類
+                if(heart_type[x].name == kind)
+                {
+                    this.heart_type[x] = 1;     // 要處理的縱列設為 1
+                    for(y in heart_type[x].arr)
+                    {
+                        //找到要處理的心
+                        if(heart_type[x].arr[y].indexOf(value)>=0)
+                        {
+                            result_arr[kind][y] = 1;  // 要處理的 心 = 1
+                        }
+                    }
+                }
+            } 
+            // 先找出總類在在哪一個縱座標
+            for(x in cetasika)
+            {
+                // 找到要處理的總類
+                if(cetasika[x].name == kind)
+                {
+                    this.cetasika[x] = 1;     // 要處理的縱列設為 1
+                    for(y in cetasika[x].arr)
+                    {
+                        //找到要處理的心
+                        if(cetasika[x].arr[y] == value)
+                        {
+                            result_arr[kind][y] = 1;  // 要處理的 心 = 1
+                        }
+                    }
+                }
+            }
+        };
+        // 由 checkbox 的狀況來設定 Result
+        // 例如 "善心" 的 checkbox 被 check , 就執行 add_condition("善惡", "善")
+        this.check_checkbox = function() {
+            self = this;
+
+            // 先建一個陣列, 用來處理找到的心, 最後再加回去 this.heart[]
+            // 例如 "作用" 那一列找到的就是 new_heart["作用"] = [1,0,1,1,0....]
+            // 例如 "三界" 那一列找到的就是 new_heart["三界"] = [0,1,0,1,1,0....]
+            // 最後全部加回 this.heart[]
+
+            var new_heart = new Object();
+
+            $("input:checked").each(function() {
+                let kind = $(this).attr("name");
+                let value = $(this).val();
+                if(new_heart[kind] == undefined)
+                {
+                    new_heart[kind] = [];
+                }
+                self.add_condition(kind, value, new_heart);
+            });
+
+            // 最後再把結果加回 this.Heart[]
+            
+            for(x in this.heart)
+            {
+                let r = 0;
+                for(y in new_heart)
+                {
+                    r += new_heart[y][x];
+                }
+                this.heart[x] = r;
+            }
+
+        };
+
+        // 將結果呈現出來
+        this.show_result = function () {
+            // 0. 先把 this.heart2_function[] 加回 this.heart[]
+            // 1. 先檢查有幾個縱列, 例如有 "善惡" , "三界" 就算二個.
+            // 2. 逐一檢查 this.heart[n] = 2 的, 就表示符合
+            // 3. 根據縱列的總類和橫列的 heart, 把變色的屬性加到 <td> 中.
+            // 4. 設定讓它變色
+
+            // 5. 另一個分類的統計表格, 就用逐一計算的方式
+
+            // 0. 先把 this.heart2_function[] 加回 this.heart[]
+
+            // 1. 先檢查有幾個縱列, 例如有 "善惡" , "三界" 就算二個.
+            var type_num = 0;
+            for(x in this.heart_type)
+            {
+                type_num += this.heart_type[x];
+            }
+            for(x in this.cetasika)
+            {
+                type_num += this.cetasika[x];
+            }
+
+            // 2. 逐一檢查 this.heart[n] = 2 的, 就表示符合
+            // 3. 根據縱列的總類和橫列的 heart, 把變色的屬性加到 <td> 中.
+            for(x in heart_type)
+            {
+                // 這一縱列被選上了, 要處理
+                if(this.heart_type[x] == 1)
+                {
+                    var found = false;  // 判斷此縱列有沒有心被選上
+                    for(y in this.heart)
+                    {
+                        // 橫列的心符合 type_num 的數量
+                        if(this.heart[y] == type_num)
+                        {
+                            // 將這個座標的 <td> 加上 class="GotIt"
+                            var sel_str = ".heart_type" + x + ".heart" + y;
+                            $(sel_str).addClass("GotIt");
+                            found = true;
+                        }
+                    }
+                    if(found)
+                    {
+                        // 因為有選上, 所以最上方的名稱也要變色
+                        var sel_str = ".heart_type_" + x;
+                        $(sel_str).addClass("GotIt");
+                    }
+                }
+            }
+            // 心所也做一次
+            for(x in cetasika)
+            {
+                // 這一縱列被選上了, 要處理
+                if(this.cetasika[x] == 1)
+                {
+                    var found = false;  // 判斷此縱列有沒有心被選上
+                    for(y in this.heart)
+                    {
+                        // 橫列的心符合 type_num 的數量
+                        if(this.heart[y] == type_num)
+                        {
+                            // 將這個座標的 <td> 加上 class="GotIt"
+                            var sel_str = ".cetasika" + x + ".heart" + y;
+                            $(sel_str).addClass("GotIt");
+                            found = true;
+                        }
+                    }
+                    if(found)
+                    {
+                        // 因為有選上, 所以最上方的名稱也要變色
+                        var sel_str = ".cetasika_" + x;
+                        $(sel_str).addClass("GotIt");
+                    }
+                }
+            }
+            // 左邊縱列的心名也要變色
+            this.found_heart = 0;
+            for(y in this.heart)
+            {
+                // 橫列的心符合 type_num 的數量
+                if((this.heart[y] == type_num) && (type_num != 0))
+                {
+                    // 將這個座標的 <td> 加上 class="GotIt"
+                    var sel_str = ".heart_type0.heart" + y;
+                    $(sel_str).addClass("GotIt");
+                    this.found_heart++;
+                }
+            }
+
+            // 5. 另一個分類的統計表格, 就用逐一計算的方式
+
+            // 這裡先記錄每一個統計的格子是由多少個心所組成, 以及由何處開始
+            // 例如第一個 8 貪根心, 就是由 0 開始, 共 8 個心
+
+            for(x in catalog_range)
+            {
+                let heart_count = 0;
+                // 在每一個分類指定的範圍尋找符合的心的數量
+                for(y=0; y<catalog_range[x][1]; y++)
+                {
+                    let index = catalog_range[x][0] + y;
+                    if((this.heart[index] == type_num) && (type_num != 0))
+                    {
+                        // 找到了
+                        heart_count++;
+                    }
+                }
+
+                if(heart_count > 0 )
+                {
+                    let catalog_id = "#catalog_" + x;
+                    $(catalog_id).addClass("GotIt");
+                    $(catalog_id).html(heart_count);
+                }
+            }
+
+        };
+        
+        this.initial();
+    }
+
+    // ============================================================================
+
+    // 程式初始化, 綁定相關的函數
+    $(document).ready(function(){  
+        initial();
+        draw_fun_menu();   // 畫功能表
+        draw_main_table();   // 畫表格
+        draw_catalog_table();   // 畫表格
+        show_readme();          // 呈現說明
+        // 綁定秀出表格的二個 div
+        $("#show_main_table").on("click", show_main_table_click);
+        $("#show_catalog_table").on("click", show_catalog_table_click);
+        $("#show_catalog_table").click();
+        //綁定 checkbok
+        $("input:checkbox").on("click", function() {
+            ShowHeart_byClick();
+        });
+    });
+</script>
+</body>
+</html>
